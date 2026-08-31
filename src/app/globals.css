@@ -1,26 +1,310 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --mc-grass-top: #55a828;
+  --mc-grass-side: #46702c;
+  --mc-dirt: #573d26;
+  --mc-stone: #424242;
+  --mc-cobble: #333333;
+  --mc-obsidian: #14101e;
+  --mc-diamond: #55ffff;
+  --mc-emerald: #55ff55;
+  --mc-gold: #ffaa00;
+  --mc-redstone: #ff3300;
+  --mc-purple: #aa00aa;
+  
+  --paper: #161814;
+  --paper-2: #20241d;
+  --paper-3: #2a2e26;
+  --ink: #e6e3da;
+  --ink-soft: #a8a499;
+  --line: rgba(230, 227, 218, 0.14);
+  --line-strong: rgba(230, 227, 218, 0.35);
+  --accent: #55a828;
+  --accent-soft: #85d658;
+  --white: #ffffff;
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --pad: clamp(1.25rem, 4vw, 4.5rem);
+  --nav: 72px;
+
+  background-color: var(--paper);
+  color: var(--ink);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-white: var(--white);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-jetbrains);
+  --font-pixel: var(--font-pixel);
+  --font-vt323: var(--font-vt323);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #161814;
+  color: var(--ink);
+  min-height: 100%;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  cursor: auto;
+}
+
+/* Custom Minecraft Typography utilities */
+.font-pixel {
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+}
+
+.font-vt323 {
+  font-family: var(--font-vt323), 'VT323', monospace;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+}
+
+.mono {
+  font-family: var(--font-jetbrains), monospace;
+}
+
+.site-pad {
+  padding-inline: var(--pad);
+}
+
+/* Minecraft UI Components */
+.pixel-border {
+  position: relative;
+  border: 4px solid #000000;
+  box-shadow:
+    inset -4px -4px 0px 0px rgba(0, 0, 0, 0.4),
+    inset 4px 4px 0px 0px rgba(255, 255, 255, 0.15);
+}
+
+.mc-box {
+  background: #21251e;
+  border: 3px solid #000;
+  box-shadow:
+    inset -3px -3px 0 0 #121410,
+    inset 3px 3px 0 0 #3a4034,
+    0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.mc-box-gold {
+  background: #252012;
+  border: 3px solid #000;
+  box-shadow:
+    inset -3px -3px 0 0 #141006,
+    inset 3px 3px 0 0 #5c4d22,
+    0 0 12px rgba(255, 170, 0, 0.2);
+}
+
+.mc-box-diamond {
+  background: #122225;
+  border: 3px solid #000;
+  box-shadow:
+    inset -3px -3px 0 0 #081214,
+    inset 3px 3px 0 0 #22565e,
+    0 0 16px rgba(85, 255, 255, 0.25);
+}
+
+.hotbar-slot {
+  background: #2d3128;
+  border: 2px solid #000000;
+  box-shadow:
+    inset 3px 3px 0px #171914,
+    inset -3px -3px 0px #4d5446;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hotbar-slot:hover {
+  background: #393f34;
+}
+
+.hotbar-active {
+  border-color: #ffffff !important;
+  box-shadow:
+    0 0 0 2px #000000,
+    0 0 0 4px #55ffff,
+    inset 3px 3px 0px #171914,
+    inset -3px -3px 0px #4d5446 !important;
+}
+
+/* Minecraft Item Tooltip */
+.mc-tooltip {
+  background-color: #100010;
+  background-image: linear-gradient(180deg, #100010 0%, #080008 100%);
+  border: 3px solid #2b0054;
+  box-shadow:
+    0 0 0 2px #000000,
+    inset 0 0 0 1px #5000a0,
+    0 10px 30px rgba(0, 0, 0, 0.9);
+  padding: 10px 14px;
+  color: #ffffff;
+}
+
+/* Enchanted Item Shimmer Effect */
+.enchanted-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.enchanted-glow::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(170, 0, 255, 0.25) 50%,
+    rgba(85, 255, 255, 0.3) 60%,
+    transparent 70%
+  );
+  transform: rotate(30deg);
+  animation: mcEnchanted 3s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes mcEnchanted {
+  0% { transform: translateY(-100%) rotate(30deg); }
+  100% { transform: translateY(100%) rotate(30deg); }
+}
+
+/* Custom Cursor Rules */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+html.has-custom-cursor a:focus-visible,
+html.has-custom-cursor button:focus-visible,
+html.has-custom-cursor input:focus-visible,
+html.has-custom-cursor textarea:focus-visible {
+  cursor: auto !important;
+}
+
+html.project-open,
+html.project-open body {
+  overflow: hidden;
+}
+
+::selection {
+  background: #ffaa00;
+  color: #111111;
+}
+
+/* Custom Pixel Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #181b16;
+  border-left: 2px solid #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #46702c;
+  border: 2px solid #000;
+  box-shadow: inset 1px 1px 0 #7cbd38;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #55a828;
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -40px;
+  z-index: 80;
+  background: #55a828;
+  color: #000;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #000;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid #ffaa00;
+  outline-offset: 3px;
+}
+
+.section-kicker {
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffaa00;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-kicker::before {
+  content: "⛏";
+  font-size: 0.9rem;
+}
+
+/* Minecraft XP Bar */
+.xp-bar-bg {
+  background: #11180d;
+  border: 2px solid #000;
+  box-shadow: inset 2px 2px 0 #000;
+  position: relative;
+  height: 14px;
+}
+
+.xp-bar-fill {
+  background: linear-gradient(180deg, #7cbd38 0%, #46702c 100%);
+  border-right: 2px solid #000;
+  height: 100%;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
